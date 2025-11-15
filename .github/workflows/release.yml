@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
     inputs:
       publish_modrinth:
-        description: 'Also push the build to Modrinth (requires secrets)'
+        description: 'Publish to Modrinth'
         type: boolean
         default: false
       release_body:
