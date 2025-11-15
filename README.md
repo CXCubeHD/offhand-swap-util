@@ -59,4 +59,4 @@ Contributions, issue reports, and feature requests are welcome—just open a PR 
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for the full text.
+This project is released under CC0 1.0 Universal. See [LICENSE](LICENSE) for the full legal text.

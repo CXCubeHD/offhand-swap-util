@@ -8,10 +8,9 @@
 		"CXCubeHD"
 	],
 	"contact": {
-		"homepage": "https://fabricmc.net/",
-		"sources": "https://github.com/FabricMC/fabric-example-mod"
+		"sources": "https://github.com/CXCubeHD/offhand-swap-util"
 	},
-	"license": "MIT",
+	"license": "CC0-1.0",
 	"icon": "assets/offhand-swap-util/icon.png",
 	"environment": "*",
 	"entrypoints": {
