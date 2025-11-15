@@ -57,7 +57,7 @@ jobs:
         uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ format('v{0}', steps.metadata.outputs.version) }}
-          name: ${{ format('Offhand Swap Util v{0} (MC {1})', steps.metadata.outputs.version, steps.metadata.outputs.mc_version) }}
+          name: ${{ format('v{0} (Fabric {1})', steps.metadata.outputs.version, steps.metadata.outputs.mc_version) }}
           body: ${{ inputs.release_body }}
           prerelease: ${{ inputs.prerelease }}
           generate_release_notes: ${{ inputs.generate_notes }}
