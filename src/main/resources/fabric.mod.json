@@ -1,0 +1,38 @@
+{
+	"schemaVersion": 1,
+	"id": "offhand-swap-util",
+	"version": "${version}",
+	"name": "Offhand Swap Util",
+	"description": "Mod for preventing accidental offhand swaps",
+	"authors": [
+		"CXCubeHD"
+	],
+	"contact": {
+		"homepage": "https://fabricmc.net/",
+		"sources": "https://github.com/FabricMC/fabric-example-mod"
+	},
+	"license": "MIT",
+	"icon": "assets/offhand-swap-util/icon.png",
+	"environment": "*",
+	"entrypoints": {
+		"main": [
+			{
+				"value": "dev.chrones.mods.OffhandSwapUtil",
+				"adapter": "kotlin"
+			}
+		]
+	},
+	"mixins": [
+		"offhand-swap-util.mixins.json"
+	],
+	"depends": {
+		"fabricloader": ">=0.17.3",
+		"minecraft": "~1.21.10",
+		"java": ">=21",
+		"fabric-api": "*",
+		"fabric-language-kotlin": "*"
+	},
+	"suggests": {
+		"another-mod": "*"
+	}
+}
