@@ -89,7 +89,7 @@ jobs:
           modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
           version: ${{ steps.metadata.outputs.version }}
           name: ${{ format('Offhand Swap Util v{0}', steps.metadata.outputs.version) }}
-          files: build/libs/*.jar
+          files: build/libs/!(*-sources).jar
           changelog: ${{ inputs.release_body }}
           game-versions: ${{ steps.metadata.outputs.mc_version }}
           loaders: fabric
