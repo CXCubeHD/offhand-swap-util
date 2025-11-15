@@ -36,12 +36,12 @@ Offhand Swap Util is a lightweight Fabric mod for Minecraft 1.21.10 that stops t
 ## Automation
 
 - **Build** – Runs automatically on every push and pull request (`.github/workflows/build.yml`). It validates the Gradle wrapper, sets up JDK 21, caches Gradle, and executes `./gradlew build`, uploading everything in `build/libs/` as a workflow artifact for quick inspection.
-- **Release** – Can be triggered manually from the Actions tab (`.github/workflows/release.yml`). The workflow rebuilds the project, uploads the jars as an artifact, and publishes a GitHub Release with every jar from `build/libs/` attached. Releases are automatically tagged as `v<yyyy.MM.dd>` and titled `Offhand Swap Util v<yyyy.MM.dd> (MC <minecraft-version>)`, while you can still supply custom body text or mark them as prereleases/generate notes. Flip the `publish_modrinth` input (and provide `MODRINTH_PROJECT_ID` repo variable + `MODRINTH_TOKEN` secret) to automatically push the same jars to Modrinth.
+- **Release** – Can be triggered manually from the Actions tab (`.github/workflows/release.yml`). The workflow rebuilds the project, uploads the jars as an artifact, and publishes a GitHub Release with every jar from `build/libs/` attached. Releases are automatically tagged as `v<yyyyMMdd.B>` (e.g. `v20251115.2`) and titled `v<yyyyMMdd.B> (Fabric <minecraft-version>)`, while you can still supply custom body text or mark them as prereleases/generate notes. Flip the `publish_modrinth` input (and provide `MODRINTH_PROJECT_ID` repo variable + `MODRINTH_TOKEN` secret) to automatically push the same jars to Modrinth.
 
 ## Versioning & artifacts
 
-- Versions default to the current UTC date in `yyyy.MM.dd` format (e.g. `2025.11.15`). Override this by setting `MOD_VERSION=<custom>` in the environment or passing `-Pmod_version=<custom>` to Gradle.
-- The produced jars follow `<archives_base_name>-mc<minecraft_version>-<version>.jar`, so each artifact clearly states both the mod release and the targeted Minecraft client (e.g. `offhand-swap-util-mc1.21.10-2025.11.15.jar`).
+- Versions default to the current UTC date plus an incrementing build counter: `yyyyMMdd.B` (e.g. `20251115.2`). The build suffix increments automatically based on how many tags for the same day already exist; override it manually by exporting `BUILD_NUMBER=<n>` or passing `-Pbuild_number=<n>` (or set a full version via `MOD_VERSION`).
+- The produced jars follow `<archives_base_name>-mc<minecraft_version>-<version>.jar`, so each artifact clearly states both the mod release and the targeted Minecraft client (e.g. `offhand-swap-util-mc1.21.10-20251115.2.jar`).
 
 ### Source layout
 

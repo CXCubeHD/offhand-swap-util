@@ -8,9 +8,46 @@ plugins {
 	id "org.jetbrains.kotlin.jvm" version "2.2.21"
 }
 
-def configuredModVersion = (System.getenv("MOD_VERSION") ?: project.findProperty("mod_version"))?.toString()
+def resolveDailyBuildNumber = { String dateStamp ->
+	try {
+		def output = new ByteArrayOutputStream()
+		exec {
+			commandLine 'git', 'tag', '--list', "v${dateStamp}.*"
+			standardOutput = output
+			ignoreExitValue = true
+		}
+		def tags = output.toString().trim().split(/\s+/).findAll { it }
+		if (tags.isEmpty()) {
+			return "1"
+		}
+		def maxBuild = tags.collect { tag ->
+			def versionText = tag.startsWith('v') ? tag.substring(1) : tag
+			def parts = versionText.split('\\.')
+			return parts.length > 1 ? parts[1].toInteger() : 1
+		}.max()
+		return (maxBuild + 1).toString()
+	} catch (Exception ignored) {
+		return null
+	}
+}
+
+def dateStamp = LocalDate.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyyMMdd"))
+def configuredModVersion = (System.getenv("MOD_VERSION") ?: project.findProperty("mod_version"))?.toString()?.trim()
+def buildNumberSource = (System.getenv("BUILD_NUMBER") ?: project.findProperty("build_number"))?.toString()?.trim()
+
 if (!configuredModVersion || configuredModVersion.equalsIgnoreCase("auto")) {
-	configuredModVersion = LocalDate.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))
+	def buildNumber = buildNumberSource
+	if (!buildNumber) {
+		buildNumber = System.getenv("GITHUB_RUN_NUMBER")
+	}
+	if (!buildNumber) {
+		buildNumber = resolveDailyBuildNumber(dateStamp)
+	}
+	def numericBuild = buildNumber?.replaceAll("[^0-9]", "")
+	if (!numericBuild) {
+		numericBuild = "1"
+	}
+	configuredModVersion = "${dateStamp}.${numericBuild}"
 }
 
 version = configuredModVersion
