@@ -36,7 +36,7 @@ Offhand Swap Util is a lightweight Fabric mod for Minecraft 1.21.10 that stops t
 ## Automation
 
 - **Build** – Runs automatically on every push and pull request (`.github/workflows/build.yml`). It validates the Gradle wrapper, sets up JDK 21, caches Gradle, and executes `./gradlew build`, uploading everything in `build/libs/` as a workflow artifact for quick inspection.
-- **Release** – Can be triggered manually from the Actions tab (`.github/workflows/release.yml`). The workflow rebuilds the project, uploads the jars as an artifact, and publishes a GitHub Release with every jar from `build/libs/` attached. Releases are automatically tagged as `v<yyyy.MM.dd>` and titled `Offhand Swap Util v<yyyy.MM.dd> (MC <minecraft-version>)`, while you can still supply custom body text or mark them as prereleases/generate notes.
+- **Release** – Can be triggered manually from the Actions tab (`.github/workflows/release.yml`). The workflow rebuilds the project, uploads the jars as an artifact, and publishes a GitHub Release with every jar from `build/libs/` attached. Releases are automatically tagged as `v<yyyy.MM.dd>` and titled `Offhand Swap Util v<yyyy.MM.dd> (MC <minecraft-version>)`, while you can still supply custom body text or mark them as prereleases/generate notes. Flip the `publish_modrinth` input (and provide `MODRINTH_PROJECT_ID` repo variable + `MODRINTH_TOKEN` secret) to automatically push the same jars to Modrinth.
 
 ## Versioning & artifacts
 

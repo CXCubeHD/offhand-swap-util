@@ -3,6 +3,10 @@ name: release
 on:
   workflow_dispatch:
     inputs:
+      publish_modrinth:
+        description: 'Also push the build to Modrinth (requires secrets)'
+        type: boolean
+        default: false
       release_body:
         description: 'Optional release notes/body'
         required: false
@@ -53,6 +57,18 @@ jobs:
         with:
           name: release-jars
           path: build/libs/*.jar
+      - name: verify modrinth config
+        if: ${{ inputs.publish_modrinth }}
+        env:
+          MODRINTH_PROJECT_ID: ${{ vars.MODRINTH_PROJECT_ID }}
+          MODRINTH_TOKEN: ${{ secrets.MODRINTH_TOKEN }}
+        run: |
+          if [ -z "$MODRINTH_PROJECT_ID" ]; then
+            echo "::error::MODRINTH_PROJECT_ID repository variable is not set" && exit 1
+          fi
+          if [ -z "$MODRINTH_TOKEN" ]; then
+            echo "::error::MODRINTH_TOKEN secret is not set" && exit 1
+          fi
       - name: create github release
         uses: softprops/action-gh-release@v2
         with:
@@ -62,3 +78,16 @@ jobs:
           prerelease: ${{ inputs.prerelease }}
           generate_release_notes: ${{ inputs.generate_notes }}
           files: build/libs/*.jar
+      - name: publish to modrinth
+        if: ${{ inputs.publish_modrinth }}
+        uses: Kir-Antipov/mc-publish@v3.3
+        with:
+          modrinth-id: ${{ vars.MODRINTH_PROJECT_ID }}
+          modrinth-token: ${{ secrets.MODRINTH_TOKEN }}
+          version: ${{ steps.metadata.outputs.version }}
+          name: ${{ format('Offhand Swap Util v{0}', steps.metadata.outputs.version) }}
+          files: build/libs/*.jar
+          changelog: ${{ inputs.release_body }}
+          game-versions: ${{ steps.metadata.outputs.mc_version }}
+          loaders: fabric
+          version-type: ${{ inputs.prerelease && 'beta' || 'release' }}
