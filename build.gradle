@@ -1,14 +1,26 @@
+import java.time.LocalDate
+import java.time.ZoneOffset
+import java.time.format.DateTimeFormatter
+
 plugins {
 	id 'fabric-loom' version "${loom_version}"
 	id 'maven-publish'
 	id "org.jetbrains.kotlin.jvm" version "2.2.21"
 }
 
-version = project.mod_version
+def configuredModVersion = (System.getenv("MOD_VERSION") ?: project.findProperty("mod_version"))?.toString()
+if (!configuredModVersion || configuredModVersion.equalsIgnoreCase("auto")) {
+	configuredModVersion = LocalDate.now(ZoneOffset.UTC).format(DateTimeFormatter.ofPattern("yyyy.MM.dd"))
+}
+
+version = configuredModVersion
 group = project.maven_group
 
+def minecraftTargetVersion = project.findProperty("minecraft_version")?.toString() ?: "unknown"
+def computedArchiveBaseName = "${project.archives_base_name}-mc${minecraftTargetVersion}"
+
 base {
-	archivesName = project.archives_base_name
+	archivesName = computedArchiveBaseName
 }
 
 repositories {
@@ -63,6 +75,32 @@ jar {
 
 	from("LICENSE") {
 		rename { "${it}_${inputs.properties.archivesName}"}
+	}
+}
+
+tasks.register("printVersion") {
+	group = "help"
+	description = "Prints the resolved project version"
+	doLast {
+		println configuredModVersion
+	}
+}
+
+tasks.register("printMinecraftVersion") {
+	group = "help"
+	description = "Prints the targeted Minecraft client version"
+	doLast {
+		println minecraftTargetVersion
+	}
+}
+
+tasks.register("printCiMetadata") {
+	group = "help"
+	description = "Prints project metadata (version and target) for CI consumers"
+	doLast {
+		println "VERSION=${configuredModVersion}"
+		println "MC_VERSION=${minecraftTargetVersion}"
+		println "ARCHIVE_BASE=${computedArchiveBaseName}"
 	}
 }
 

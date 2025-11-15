@@ -36,7 +36,12 @@ Offhand Swap Util is a lightweight Fabric mod for Minecraft 1.21.10 that stops t
 ## Automation
 
 - **Build** – Runs automatically on every push and pull request (`.github/workflows/build.yml`). It validates the Gradle wrapper, sets up JDK 21, caches Gradle, and executes `./gradlew build`, uploading everything in `build/libs/` as a workflow artifact for quick inspection.
-- **Release** – Can be triggered manually from the Actions tab (`.github/workflows/release.yml`). The workflow rebuilds the project, uploads the jars as an artifact, and publishes a GitHub Release with every jar from `build/libs/` attached. When starting the workflow, provide a `tag_name` (e.g., `v1.0.1`), optionally override the release title/body, and choose whether to mark it as a prerelease or auto-generate release notes.
+- **Release** – Can be triggered manually from the Actions tab (`.github/workflows/release.yml`). The workflow rebuilds the project, uploads the jars as an artifact, and publishes a GitHub Release with every jar from `build/libs/` attached. Releases are automatically tagged as `v<yyyy.MM.dd>` and titled `Offhand Swap Util v<yyyy.MM.dd> (MC <minecraft-version>)`, while you can still supply custom body text or mark them as prereleases/generate notes.
+
+## Versioning & artifacts
+
+- Versions default to the current UTC date in `yyyy.MM.dd` format (e.g. `2025.11.15`). Override this by setting `MOD_VERSION=<custom>` in the environment or passing `-Pmod_version=<custom>` to Gradle.
+- The produced jars follow `<archives_base_name>-mc<minecraft_version>-<version>.jar`, so each artifact clearly states both the mod release and the targeted Minecraft client (e.g. `offhand-swap-util-mc1.21.10-2025.11.15.jar`).
 
 ### Source layout
 
