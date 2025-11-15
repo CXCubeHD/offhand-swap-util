@@ -33,6 +33,11 @@ Offhand Swap Util is a lightweight Fabric mod for Minecraft 1.21.10 that stops t
 2. Run `./gradlew build` to compile the Kotlin mixin entrypoint (`dev.chrones.mods.OffhandSwapUtil`) and the mixin that guards `KeyboardHandler#keyPress`.
 3. Use the `build/libs` artifact during manual testing or supply it to CurseForge, Modrinth, or another loader target for distribution.
 
+## Automation
+
+- **Build** – Runs automatically on every push and pull request (`.github/workflows/build.yml`). It validates the Gradle wrapper, sets up JDK 21, caches Gradle, and executes `./gradlew build`, uploading everything in `build/libs/` as a workflow artifact for quick inspection.
+- **Release** – Can be triggered manually from the Actions tab (`.github/workflows/release.yml`). The workflow rebuilds the project, uploads the jars as an artifact, and publishes a GitHub Release with every jar from `build/libs/` attached. When starting the workflow, provide a `tag_name` (e.g., `v1.0.1`), optionally override the release title/body, and choose whether to mark it as a prerelease or auto-generate release notes.
+
 ### Source layout
 
 - Kotlin entry point: `src/main/kotlin/dev/chrones/mods/OffhandSwapUtil.kt`
